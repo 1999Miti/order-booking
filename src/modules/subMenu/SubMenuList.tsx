@@ -1,18 +1,21 @@
 "use client";
 import { SubMenuContext } from "@/app/menu/[id]/layout";
 import { GlobalContext } from "@/app/menu/layout";
-import { NumberInput } from "@/common/components/MuiNumberInput";
+import {
+  StyledButton,
+  StyledInput,
+} from "@/common/components/StyledComponents";
 import useResize from "@/common/hooks/useResize";
 import { IGlobalContext, IMenuData, ISubMenuData } from "@/common/types";
 import {
-  Box,
-  Grid2,
-  Button,
-  Snackbar,
   Alert,
+  Box,
+  Button,
+  Grid2,
+  Snackbar,
   SnackbarCloseReason,
 } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 const SubMenuList = () => {
   const { width } = useResize();
@@ -43,7 +46,15 @@ const SubMenuList = () => {
       (item) => item.subMenuId === data.subMenuId
     );
     if (existingItem?.length > 0) {
-      return <NumberInput min={0} max={5} />;
+      return (
+        <Grid2 container>
+          <Grid2 display={"flex"} flexDirection={"row"}>
+            <StyledButton>-</StyledButton>
+            <StyledInput value={6} />
+            <StyledButton onClick={() => console.log("add")}>+</StyledButton>
+          </Grid2>
+        </Grid2>
+      );
     } else {
       return (
         <>

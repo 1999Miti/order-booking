@@ -1,38 +1,4 @@
-import * as React from "react";
-import {
-  Unstable_NumberInput as BaseNumberInput,
-  NumberInputProps,
-} from "@mui/base/Unstable_NumberInput";
 import { styled } from "@mui/system";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
-
-export const NumberInput = React.forwardRef(function CustomNumberInput(
-  props: NumberInputProps,
-  ref: React.ForwardedRef<HTMLDivElement>
-) {
-  return (
-    <BaseNumberInput
-      slots={{
-        root: StyledInputRoot,
-        input: StyledInput,
-        incrementButton: StyledButton,
-        decrementButton: StyledButton,
-      }}
-      slotProps={{
-        incrementButton: {
-          children: <AddIcon fontSize="small"/>,
-          className: "increment",
-        },
-        decrementButton: {
-          children: <RemoveIcon fontSize="small" />,
-        },
-      }}
-      {...props}
-      ref={ref}
-    />
-  );
-});
 
 const purple = {
   100: "#d1c4e9",
@@ -58,7 +24,7 @@ const grey = {
   900: "#1C2025",
 };
 
-const StyledInputRoot = styled("div")(
+export const StyledInputRoot = styled("div")(
   ({ theme }) => `
   font-family: 'IBM Plex Sans', sans-serif;
   font-weight: 400;
@@ -70,7 +36,7 @@ const StyledInputRoot = styled("div")(
 `
 );
 
-const StyledInput = styled("input")(
+export const StyledInput = styled("input")(
   ({ theme }) => `
   font-size: 0.875rem;
   font-family: inherit;
@@ -107,7 +73,7 @@ const StyledInput = styled("input")(
 `
 );
 
-const StyledButton = styled("button")(
+export const StyledButton = styled("button")(
   ({ theme }) => `
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 0.875rem;
@@ -131,9 +97,7 @@ const StyledButton = styled("button")(
   &:hover {
     cursor: pointer;
     background: ${theme.palette.mode === "dark" ? purple[700] : purple[400]};
-    border-color: ${
-      theme.palette.mode === "dark" ? purple[500] : purple[400]
-    };
+    border-color: ${theme.palette.mode === "dark" ? purple[500] : purple[400]};
     color: ${grey[50]};
   }
 
