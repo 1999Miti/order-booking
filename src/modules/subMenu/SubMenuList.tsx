@@ -7,21 +7,15 @@ import {
 } from "@/common/components/StyledComponents";
 import useResize from "@/common/hooks/useResize";
 import { IGlobalContext, IMenuData, ISubMenuData } from "@/common/types";
-import {
-  Alert,
-  Box,
-  Button,
-  Grid2,
-  Snackbar,
-  SnackbarCloseReason,
-} from "@mui/material";
+import { Box, Button, Grid2, SnackbarCloseReason } from "@mui/material";
 import React, { useContext, useState } from "react";
 
 const SubMenuList = () => {
   const { width } = useResize();
-  const [open, setOpen] = useState(false);
   const isMobile = width && width < 800;
-  const { addItems, cartItems } = useContext(GlobalContext) as IGlobalContext;
+  const { addItem, cartItems, removeItem } = useContext(
+    GlobalContext
+  ) as IGlobalContext;
   const { tabValue, tabs, menuData } = useContext(
     SubMenuContext
   ) as ISubMenuData;
@@ -30,48 +24,17 @@ const SubMenuList = () => {
     return tabs.filter((tab) => tab.id === tabValue);
   };
 
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  const addOrRemoveItem = (data: IMenuData) => {
-    const existingItem = cartItems.filter(
+  const getExistingItems = (data: IMenuData) => {
+    const existingItems = cartItems.filter(
       (item) => item.subMenuId === data.subMenuId
     );
-    if (existingItem?.length > 0) {
-      return (
-        <Grid2 container>
-          <Grid2 display={"flex"} flexDirection={"row"}>
-            <StyledButton>-</StyledButton>
-            <StyledInput value={6} />
-            <StyledButton onClick={() => console.log("add")}>+</StyledButton>
-          </Grid2>
-        </Grid2>
-      );
-    } else {
-      return (
-        <>
-          <Button
-            size="medium"
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              setOpen(true);
-              addItems(data);
-            }}
-          >
-            ADD
-          </Button>
-        </>
-      );
-    }
+    return existingItems;
+  };
+
+  const getPrice = (data: IMenuData) => {
+    return getExistingItems(data).length > 0
+      ? parseInt(data.price) * getExistingItems(data).length
+      : data.price;
   };
 
   const gridData = () => {
@@ -99,29 +62,37 @@ const SubMenuList = () => {
                 marginRight={5}
               >
                 <Box marginTop={isMobile ? "5px" : "0px"}>{data.name}</Box>
-                <Box marginTop={"5px"}>{data.price}</Box>
+                <Box marginTop={"5px"}>{getPrice(data)}</Box>
               </Box>
               {!isMobile && <Box>{data.description}</Box>}
             </Grid2>
-            <Grid2 size={2}>{addOrRemoveItem(data)}</Grid2>
+            <Grid2 size={2}>
+              {getExistingItems(data)?.length > 0 ? (
+                <Grid2 container>
+                  <Grid2 display={"flex"} flexDirection={"row"}>
+                    <StyledButton onClick={() => removeItem(data)}>
+                      -
+                    </StyledButton>
+                    <StyledInput value={getExistingItems(data).length} />
+                    <StyledButton onClick={() => addItem(data)}>+</StyledButton>
+                  </Grid2>
+                </Grid2>
+              ) : (
+                <Button
+                  size="medium"
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    addItem(data);
+                  }}
+                >
+                  ADD
+                </Button>
+              )}
+            </Grid2>
           </Grid2>
         );
       })}
-      <Snackbar
-        open={open}
-        autoHideDuration={2000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          Item Added!
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

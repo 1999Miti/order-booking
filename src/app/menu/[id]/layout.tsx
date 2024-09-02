@@ -6,8 +6,9 @@ import Box from "@mui/material/Box";
 import { subMenuData } from "@/common/data/subMenuData";
 import { useParams, useRouter } from "next/navigation";
 import { createContext } from "react";
-import { ISubMenuData } from "@/common/types";
-import { Link } from "@mui/material";
+import { IGlobalContext, ISubMenuData } from "@/common/types";
+import { Button, Link } from "@mui/material";
+import { GlobalContext } from "../layout";
 
 export const SubMenuContext = createContext<ISubMenuData | null>(null);
 
@@ -17,6 +18,7 @@ const SubMenuLayout = ({
   children: React.ReactNode;
 }>) => {
   const [value, setValue] = React.useState(0);
+  const { cartItems } = React.useContext(GlobalContext) as IGlobalContext;
   const params = useParams();
   const router = useRouter();
   const subMenu = subMenuData.filter(
@@ -37,7 +39,28 @@ const SubMenuLayout = ({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Link href="#" component={'a'} onClick={() => router.replace('/menu') } underline="hover">Go to menu</Link>
+      <Box display={"flex"} justifyContent={"space-between"}>
+        <Link
+          href="#"
+          component={"a"}
+          onClick={() => router.replace("/menu")}
+          underline="hover"
+        >
+          Go to menu
+        </Link>
+        {cartItems.length > 0 && (
+          <Button
+            size="medium"
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              console.log("confirm");
+            }}
+          >
+            Confirm order
+          </Button>
+        )}
+      </Box>
       <Box marginBottom={"1rem"} />
       <SubMenuContext.Provider
         value={{ tabValue: value, menuData: subMenu, tabs: tabs }}

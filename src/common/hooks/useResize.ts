@@ -21,7 +21,7 @@ const useResize = () => {
         window.removeEventListener("resize", handleResize);
       };
     }
-  }, [window.innerWidth]);
+  }, [window !== undefined && window.innerWidth]);
 
   return { width };
 };

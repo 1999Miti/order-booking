@@ -78,14 +78,15 @@ export const StyledButton = styled("button")(
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 0.875rem;
   box-sizing: border-box;
+  margin-top:5px;
   line-height: 1.5;
   border: 1px solid;
   border-radius: 999px;
   border-color: ${theme.palette.mode === "dark" ? grey[800] : grey[200]};
   background: ${theme.palette.mode === "dark" ? grey[900] : grey[50]};
   color: ${theme.palette.mode === "dark" ? grey[200] : grey[900]};
-  width: 32px;
-  height: 32px;
+  width: 35px;
+  height: 30px;
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;

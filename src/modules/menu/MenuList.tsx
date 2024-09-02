@@ -18,6 +18,8 @@ const MenuList = () => {
           height: "100%",
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
+          justifyContent: "center",
+          cursor: "pointer",
         }}
       >
         {menuData.map((menu) => (

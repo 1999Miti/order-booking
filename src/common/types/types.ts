@@ -18,5 +18,6 @@ export interface ISubMenuData {
 
 export interface IGlobalContext {
   cartItems: IMenuData[];
-  addItems: (data: IMenuData) => void;
+  addItem: (data: IMenuData) => void;
+  removeItem: (data: IMenuData) => void;
 }
