@@ -7,8 +7,8 @@ import {
 } from "@/common/components/StyledComponents";
 import useResize from "@/common/hooks/useResize";
 import { IGlobalContext, IMenuData, ISubMenuData } from "@/common/types";
-import { Box, Button, Grid2, SnackbarCloseReason } from "@mui/material";
-import React, { useContext, useState } from "react";
+import { Box, Button, Grid2 } from "@mui/material";
+import { useContext } from "react";
 
 const SubMenuList = () => {
   const { width } = useResize();
@@ -33,7 +33,7 @@ const SubMenuList = () => {
 
   const getPrice = (data: IMenuData) => {
     return getExistingItems(data).length > 0
-      ? parseInt(data.price) * getExistingItems(data).length
+      ? `${parseInt(data.price) * getExistingItems(data).length} ₹`
       : data.price;
   };
 
@@ -55,7 +55,11 @@ const SubMenuList = () => {
             key={data.subMenuId}
             marginBottom={"2rem"}
           >
-            <Grid2 size={10} display={"flex"} flexDirection={"column"}>
+            <Grid2
+              size={isMobile ? 9 : 10}
+              display={"flex"}
+              flexDirection={"column"}
+            >
               <Box
                 display={"flex"}
                 justifyContent={"space-between"}
@@ -66,22 +70,28 @@ const SubMenuList = () => {
               </Box>
               {!isMobile && <Box>{data.description}</Box>}
             </Grid2>
-            <Grid2 size={2}>
+            <Grid2
+              size={isMobile ? 12 : 2}
+              marginLeft={isMobile ? 25 : 0}
+              marginTop={isMobile ? 2 : 0}
+            >
               {getExistingItems(data)?.length > 0 ? (
-                <Grid2 container>
-                  <Grid2 display={"flex"} flexDirection={"row"}>
-                    <StyledButton onClick={() => removeItem(data)}>
-                      -
-                    </StyledButton>
-                    <StyledInput value={getExistingItems(data).length} />
-                    <StyledButton onClick={() => addItem(data)}>+</StyledButton>
-                  </Grid2>
+                <Grid2 display={"flex"} flexDirection={"row"}>
+                  <StyledButton onClick={() => removeItem(data)}>
+                    -
+                  </StyledButton>
+                  <StyledInput value={getExistingItems(data).length} />
+                  <StyledButton onClick={() => addItem(data)}>+</StyledButton>
                 </Grid2>
               ) : (
                 <Button
                   size="medium"
                   variant="contained"
                   color="secondary"
+                  sx={{
+                    minWidth: "5rem",
+                    marginLeft: isMobile ? 6 : 4,
+                  }}
                   onClick={() => {
                     addItem(data);
                   }}

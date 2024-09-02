@@ -26,7 +26,9 @@ export default function MenuLayout({
     });
   };
   return (
-    <GlobalContext.Provider value={{ cartItems, addItem, removeItem }}>
+    <GlobalContext.Provider
+      value={{ cartItems, addItem, removeItem, setCartItems }}
+    >
       <Container fixed>
         <h2>What you would like to eat today ?</h2>
         {children}
