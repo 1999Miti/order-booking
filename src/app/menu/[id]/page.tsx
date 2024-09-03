@@ -1,4 +1,4 @@
-import SubMenuList from "@/modules/subMenu/SubMenuList";
+import SubMenuList from "@src/modules/subMenu/SubMenuList";
 import React from "react";
 
 const SubMenuPage = () => {

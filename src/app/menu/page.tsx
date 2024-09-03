@@ -1,4 +1,4 @@
-import MenuList from "@/modules/menu/MenuList";
+import MenuList from "@src/modules/menu/MenuList";
 import React from "react";
 
 const MenuPage = () => {

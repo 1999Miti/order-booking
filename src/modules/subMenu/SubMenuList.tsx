@@ -1,13 +1,14 @@
 "use client";
-import { SubMenuContext } from "@/app/menu/[id]/layout";
-import { GlobalContext } from "@/app/menu/layout";
+
+import { Box, Button, Grid2 } from "@mui/material";
+
 import {
   StyledButton,
   StyledInput,
-} from "@/common/components/StyledComponents";
-import useResize from "@/common/hooks/useResize";
-import { IGlobalContext, IMenuData, ISubMenuData } from "@/common/types";
-import { Box, Button, Grid2 } from "@mui/material";
+} from "@src/common/components/StyledComponents";
+import useResize from "@src/common/hooks/useResize";
+import { IGlobalContext, IMenuData } from "@src/common/types";
+import { GlobalContext, SubMenuContext } from "@src/common/utils";
 import { useContext } from "react";
 
 const SubMenuList = () => {
@@ -16,9 +17,7 @@ const SubMenuList = () => {
   const { addItem, cartItems, removeItem } = useContext(
     GlobalContext
   ) as IGlobalContext;
-  const { tabValue, tabs, menuData } = useContext(
-    SubMenuContext
-  ) as ISubMenuData;
+  const { tabValue, tabs, menuData } = useContext(SubMenuContext);
 
   const getCurrentTab = () => {
     return tabs.filter((tab) => tab.id === tabValue);
@@ -26,7 +25,7 @@ const SubMenuList = () => {
 
   const getExistingItems = (data: IMenuData) => {
     const existingItems = cartItems.filter(
-      (item) => item.subMenuId === data.subMenuId
+      (item: IMenuData) => item.subMenuId === data.subMenuId
     );
     return existingItems;
   };
@@ -38,7 +37,7 @@ const SubMenuList = () => {
   };
 
   const gridData = () => {
-    return menuData?.filter((menu) => {
+    return menuData?.filter((menu: IMenuData) => {
       return menu.type === getCurrentTab()[0]?.name;
     });
   };

@@ -1,17 +1,11 @@
 "use client";
-import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { subMenuData } from "@/common/data/subMenuData";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+
 import { useParams, useRouter } from "next/navigation";
-import { createContext } from "react";
-import {
-  IGlobalContext,
-  IMenuData,
-  ISubMenuData,
-  ISummary,
-} from "@/common/types";
+import { useContext, useMemo, useState } from "react";
+
 import {
   Button,
   Dialog,
@@ -21,41 +15,32 @@ import {
   DialogTitle,
   Link,
 } from "@mui/material";
-import { GlobalContext } from "../layout";
+import { subMenuData } from "@src/common/data/subMenuData";
+import { IGlobalContext, IMenuData, ISummary } from "@src/common/types";
+import { GlobalContext, SubMenuContext } from "@src/common/utils";
 
-export const SubMenuContext = createContext<ISubMenuData | null>(null);
-
-const SubMenuLayout = ({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) => {
-  const [value, setValue] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
-  const { cartItems, setCartItems } = React.useContext(
+export default function SubMenuLayout(
+  props: Readonly<{ children?: JSX.Element }>
+) {
+  const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
+  const { cartItems, setCartItems } = useContext(
     GlobalContext
   ) as IGlobalContext;
   const params = useParams();
   const router = useRouter();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const subMenu = subMenuData.filter(
     (data) => data.menuId === parseInt(params.id as string)
   );
   const tabs = Array.from(new Set(subMenu.map((tab) => tab.type))).map(
-    (item, i) => {
-      return {
-        name: item,
-        id: i,
-      };
-    }
+    (item, i) => ({
+      name: item,
+      id: i,
+    })
   );
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -70,16 +55,13 @@ const SubMenuLayout = ({
     items.forEach((item) => {
       const { name, price } = item;
       const priceAmount = parseFloat(price.replace(" ₹", ""));
-
       if (summary[name]) {
         summary[name].count += 1;
       } else {
         summary[name] = { count: 1, price: priceAmount };
       }
-
       totalAmount += priceAmount;
     });
-
     return { summary, totalAmount };
   };
 
@@ -109,7 +91,10 @@ const SubMenuLayout = ({
       </Box>
       <Box marginBottom={"1rem"} />
       <SubMenuContext.Provider
-        value={{ tabValue: value, menuData: subMenu, tabs: tabs }}
+        value={useMemo(
+          () => ({ tabValue: value, menuData: subMenu, tabs }),
+          [subMenu, tabs, value]
+        )}
       >
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
@@ -119,12 +104,12 @@ const SubMenuLayout = ({
             indicatorColor="secondary"
             aria-label="secondary tabs example"
           >
-            {tabs.map((tab, index) => {
-              return <Tab label={tab.name.toUpperCase()} key={tab.id} />;
-            })}
+            {tabs.map((tab) => (
+              <Tab label={tab.name.toUpperCase()} key={tab.id} />
+            ))}
           </Tabs>
         </Box>
-        {children}
+        {props.children}
         <Dialog
           fullWidth
           maxWidth={"md"}
@@ -157,7 +142,7 @@ const SubMenuLayout = ({
             <Button onClick={handleClose}>Close</Button>
             <Button
               onClick={() => {
-                if (window !== undefined) {
+                if (typeof window !== "undefined") {
                   window.alert("Place order");
                 }
                 setCartItems([]);
@@ -172,6 +157,4 @@ const SubMenuLayout = ({
       </SubMenuContext.Provider>
     </Box>
   );
-};
-
-export default SubMenuLayout;
+}

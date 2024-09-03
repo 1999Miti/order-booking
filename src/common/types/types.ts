@@ -1,4 +1,4 @@
-import { SetStateAction } from "react";
+import React, { SetStateAction } from "react";
 
 export interface IMenuData {
   menuId: number;
@@ -23,6 +23,8 @@ export interface IGlobalContext {
   addItem: (data: IMenuData) => void;
   removeItem: (data: IMenuData) => void;
   setCartItems: React.Dispatch<SetStateAction<IMenuData[]>>;
+  theme: string;
+  setTheme: React.Dispatch<SetStateAction<string>>;
 }
 
 export interface ISummaryItem {
@@ -32,4 +34,9 @@ export interface ISummaryItem {
 
 export interface ISummary {
   [key: string]: ISummaryItem;
+}
+
+export interface ISlots {
+  children: React.ReactNode;
+  settings: React.ReactNode;
 }

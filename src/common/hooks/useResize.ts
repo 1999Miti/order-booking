@@ -1,27 +1,27 @@
-'use client'
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 const useResize = () => {
-  const [width, setWidth] = useState<number>();
+  const [width, setWidth] = useState<number>(0);
 
   useEffect(() => {
-    if (window !== undefined) {
+    // Check if `window` is available (i.e., we're in the browser)
+    if (typeof window !== "undefined") {
+      // Set initial width
+      setWidth(window.innerWidth);
+
+      // Update width on resize
       const handleResize = () => {
         setWidth(window.innerWidth);
       };
 
-      // Attach event listener
       window.addEventListener("resize", handleResize);
-
-      // Call handler right away so state gets updated with initial window size
-      handleResize();
 
       // Cleanup event listener on component unmount
       return () => {
         window.removeEventListener("resize", handleResize);
       };
     }
-  }, [window !== undefined && window.innerWidth]);
+  }, []); // Empty dependency array to run only on mount/unmount
 
   return { width };
 };

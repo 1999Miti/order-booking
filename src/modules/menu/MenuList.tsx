@@ -1,7 +1,8 @@
 "use client";
-import { menuData } from "@/common/data";
-import useResize from "@/common/hooks/useResize";
+
 import { Box, ImageList, ImageListItem } from "@mui/material";
+import { menuData } from "@src/common/data";
+import useResize from "@src/common/hooks/useResize";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";

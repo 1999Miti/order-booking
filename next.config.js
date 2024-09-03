@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async redirects() {
+  reactStrictMode: true,
+  basePath: '',
+  redirects: () => {
     return [
       {
-        source: "/",
-        destination: "/menu",
+        source: '/',
+        destination: '/menu',
         permanent: true,
       },
     ];
